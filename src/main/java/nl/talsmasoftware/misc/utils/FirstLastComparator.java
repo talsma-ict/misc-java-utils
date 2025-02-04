@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Talsma ICT
+ * Copyright 2022-2025 Talsma ICT
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.util.Objects;
 
 /**
  * Comparator to sort certain values first or last.
+ *
  * <p>
  * For example:
  * <pre>{@code
@@ -35,6 +36,7 @@ import java.util.Objects;
  * where {@code "Always last"} is always sorted last.
  *
  * @param <T> The type to be sorted.
+ * @author Sjoerd Talsma
  */
 public final class FirstLastComparator<T> implements Comparator<T>, Serializable {
     private final Comparator<T> delegate;
