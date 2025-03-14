@@ -32,7 +32,9 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
       - name: Build with Maven
-        run: ./mvnw --batch-mode clean verify
+        run: ./mvnw --batch-mode clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Publish to Apache Maven Central
         run: ./mvnw --batch-mode --no-snapshot-updates -Ppublish deploy -DskipTests
         env:
