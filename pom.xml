@@ -73,7 +73,7 @@
         <sonar.projectKey>${sonar.organization}_${project.artifactId}</sonar.projectKey>
 
         <!-- test -->
-        <junit.version>5.11.4</junit.version>
+        <junit.version>5.12.1</junit.version>
         <assertj.version>3.27.3</assertj.version>
         <hamcrest.version>3.0</hamcrest.version>
 
