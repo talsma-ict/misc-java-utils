@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=talsma-ict_misc-java-utils&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=talsma-ict_misc-java-utils)
+
 # Miscellaneous Java Utilities
 
 These are miscellaneous classes or code snippets that were gathered over the years.
@@ -15,4 +17,3 @@ However:
   A link to this repository would be nice (and might help remember where you found it).
 - Hopefully you can find something useful in this repository.
 - Contributions are accepted and welcomed. Feel free to file a pull-request.
-
