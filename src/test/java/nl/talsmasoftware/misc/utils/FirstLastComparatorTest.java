@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -114,11 +115,12 @@ class FirstLastComparatorTest {
     void all_parameters_to_factorymethods_are_required() {
         final Comparator<String> natural = Comparator.naturalOrder();
         // Check nulls for compareFirst
+        Set<String> singleEmptyString = Collections.singleton("");
         assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(null, "")))
                 .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
         assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(natural, (String[]) null)))
                 .hasFieldOrPropertyWithValue("message", "firstValues is <null>.");
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(null, Collections.singleton(""))))
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(null, singleEmptyString)))
                 .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
         assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(natural, (List<String>) null)))
                 .hasFieldOrPropertyWithValue("message", "firstValues is <null>.");
@@ -128,7 +130,7 @@ class FirstLastComparatorTest {
                 .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
         assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(natural, (String[]) null)))
                 .hasFieldOrPropertyWithValue("message", "lastValues is <null>.");
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(null, Collections.singleton(""))))
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(null, singleEmptyString)))
                 .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
         assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(natural, (List<String>) null)))
                 .hasFieldOrPropertyWithValue("message", "lastValues is <null>.");
