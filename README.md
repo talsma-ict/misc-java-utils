@@ -1,4 +1,5 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=talsma-ict_misc-java-utils&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=talsma-ict_misc-java-utils)
+[![Coverage Status](https://coveralls.io/repos/github/talsma-ict/misc-java-utils/badge.svg?branch=develop)](https://coveralls.io/github/talsma-ict/misc-java-utils?branch=develop)
 
 # Miscellaneous Java Utilities
 
