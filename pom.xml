@@ -75,7 +75,6 @@
         <!-- test -->
         <junit.version>5.12.1</junit.version>
         <assertj.version>3.27.3</assertj.version>
-        <hamcrest.version>3.0</hamcrest.version>
 
         <!-- build -->
         <coveralls.jaxb-api.version>2.3.1</coveralls.jaxb-api.version>
@@ -290,12 +289,6 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest</artifactId>
-            <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

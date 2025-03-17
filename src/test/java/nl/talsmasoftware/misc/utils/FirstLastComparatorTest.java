@@ -23,12 +23,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Collections.emptyList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FirstLastComparatorTest {
@@ -43,8 +41,8 @@ class FirstLastComparatorTest {
         final String result2 = sortString(FirstLastComparator.compareLast(delegate, emptyList()), value);
 
         // verify
-        assertThat(result1, equalTo("abcd"));
-        assertThat(result2, equalTo("abcd"));
+        assertThat(result1).isEqualTo("abcd");
+        assertThat(result2).isEqualTo("abcd");
     }
 
     @Test
@@ -56,7 +54,7 @@ class FirstLastComparatorTest {
         final String result = sortString(subject, "The quick brown fox jumps over the lazy dog");
 
         // verify
-        assertThat(result, equalTo("oooo        Tabcdeeefghhijklmnpqrrstuuvwxyz"));
+        assertThat(result).isEqualTo("oooo        Tabcdeeefghhijklmnpqrrstuuvwxyz");
     }
 
     @Test
@@ -68,7 +66,7 @@ class FirstLastComparatorTest {
         final String result = sortString(subject, "The quick brown fox jumps over the lazy dog");
 
         // verify
-        assertThat(result, equalTo("zyxwvuutsrrqpnmlkjihhgfeeedcbaT        oooo"));
+        assertThat(result).isEqualTo("zyxwvuutsrrqpnmlkjihhgfeeedcbaT        oooo");
     }
 
     @Test
@@ -80,7 +78,7 @@ class FirstLastComparatorTest {
         final String result = sortString(subject, "The quick brown fox jumps over the lazy dog");
 
         // verify
-        assertThat(result, equalTo("oooorra        Tbcdeeefghhijklmnpqstuuvwxyz"));
+        assertThat(result).isEqualTo("oooorra        Tbcdeeefghhijklmnpqstuuvwxyz");
     }
 
     @Test
@@ -92,7 +90,7 @@ class FirstLastComparatorTest {
         final String result = sortString(subject, "The quick brown fox jumps over the lazy dog");
 
         // verify
-        assertThat(result, equalTo("        Tbcdeeefghhijklmnpqstuuvwxyzoooorra"));
+        assertThat(result).isEqualTo("        Tbcdeeefghhijklmnpqstuuvwxyzoooorra");
     }
 
     @Test
@@ -107,43 +105,42 @@ class FirstLastComparatorTest {
         List<String> result4 = sortCopy(FirstLastComparator.compareLast(Comparator.naturalOrder(), "last", null), values);
 
         // verify
-        assertThat(result1, contains("first", null, null, "    ", "aaaa", "last", "zzzz"));
-        assertThat(result2, contains(null, null, "first", "    ", "aaaa", "last", "zzzz"));
-        assertThat(result3, contains("    ", "aaaa", "first", "zzzz", null, null, "last"));
-        assertThat(result4, contains("    ", "aaaa", "first", "zzzz", "last", null, null));
+        assertThat(result1).containsExactly("first", null, null, "    ", "aaaa", "last", "zzzz");
+        assertThat(result2).containsExactly(null, null, "first", "    ", "aaaa", "last", "zzzz");
+        assertThat(result3).containsExactly("    ", "aaaa", "first", "zzzz", null, null, "last");
+        assertThat(result4).containsExactly("    ", "aaaa", "first", "zzzz", "last", null, null);
     }
 
     @Test
     void all_parameters_to_factorymethods_are_required() {
         final Comparator<String> natural = Comparator.naturalOrder();
         // Check nulls for compareFirst
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(null, "")),
-                hasProperty("message", equalTo("Delegate comparator is <null>.")));
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(natural, (String[]) null)),
-                hasProperty("message", equalTo("firstValues is <null>.")));
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(null, Collections.singleton(""))),
-                hasProperty("message", equalTo("Delegate comparator is <null>.")));
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(natural, (List<String>) null)),
-                hasProperty("message", equalTo("firstValues is <null>.")));
+        Set<String> singleEmptyString = Collections.singleton("");
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(null, "")))
+                .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(natural, (String[]) null)))
+                .hasFieldOrPropertyWithValue("message", "firstValues is <null>.");
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(null, singleEmptyString)))
+                .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(natural, (List<String>) null)))
+                .hasFieldOrPropertyWithValue("message", "firstValues is <null>.");
 
         // Check nulls for compareLast
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(null, "")),
-                hasProperty("message", equalTo("Delegate comparator is <null>.")));
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(natural, (String[]) null)),
-                hasProperty("message", equalTo("lastValues is <null>.")));
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(null, Collections.singleton(""))),
-                hasProperty("message", equalTo("Delegate comparator is <null>.")));
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(natural, (List<String>) null)),
-                hasProperty("message", equalTo("lastValues is <null>.")));
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(null, "")))
+                .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(natural, (String[]) null)))
+                .hasFieldOrPropertyWithValue("message", "lastValues is <null>.");
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(null, singleEmptyString)))
+                .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
+        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(natural, (List<String>) null)))
+                .hasFieldOrPropertyWithValue("message", "lastValues is <null>.");
     }
 
     static String sortString(Comparator<Character> comparator, String characters) {
-        char[] chars = characters.toCharArray();
-        List<Character> values = new ArrayList<>(chars.length);
-        for (char ch : chars) {
-            values.add(ch);
-        }
-        return sortCopy(comparator, values).stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
+        return characters.chars()
+                .mapToObj(ch -> (char) ch)
+                .sorted(comparator)
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
     }
 
     static <T> List<T> sortCopy(Comparator<? super T> comparator, Collection<? extends T> values) {
