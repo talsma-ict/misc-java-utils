@@ -27,7 +27,7 @@ import java.util.Set;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FirstLastComparatorTest {
     @Test
@@ -116,24 +116,36 @@ class FirstLastComparatorTest {
         final Comparator<String> natural = Comparator.naturalOrder();
         // Check nulls for compareFirst
         Set<String> singleEmptyString = Collections.singleton("");
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(null, "")))
-                .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(natural, (String[]) null)))
-                .hasFieldOrPropertyWithValue("message", "firstValues is <null>.");
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(null, singleEmptyString)))
-                .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareFirst(natural, (List<String>) null)))
-                .hasFieldOrPropertyWithValue("message", "firstValues is <null>.");
+
+        assertThatThrownBy(() -> FirstLastComparator.compareFirst(null, ""))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Delegate comparator is <null>.");
+        assertThatThrownBy(() -> FirstLastComparator.compareFirst(natural, (String[]) null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("firstValues is <null>.");
+        assertThatThrownBy(() -> FirstLastComparator.compareFirst(null, singleEmptyString))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Delegate comparator is <null>.");
+        assertThatThrownBy(() -> FirstLastComparator.compareFirst(natural, (List<String>) null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("firstValues is <null>.");
 
         // Check nulls for compareLast
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(null, "")))
-                .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(natural, (String[]) null)))
-                .hasFieldOrPropertyWithValue("message", "lastValues is <null>.");
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(null, singleEmptyString)))
-                .hasFieldOrPropertyWithValue("message", "Delegate comparator is <null>.");
-        assertThat(assertThrows(NullPointerException.class, () -> FirstLastComparator.compareLast(natural, (List<String>) null)))
-                .hasFieldOrPropertyWithValue("message", "lastValues is <null>.");
+        assertThatThrownBy(() -> FirstLastComparator.compareLast(null, ""))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Delegate comparator is <null>.");
+        assertThatThrownBy(() -> FirstLastComparator.compareLast(null, ""))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Delegate comparator is <null>.");
+        assertThatThrownBy(() -> FirstLastComparator.compareLast(natural, (String[]) null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("lastValues is <null>.");
+        assertThatThrownBy(() -> FirstLastComparator.compareLast(null, singleEmptyString))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Delegate comparator is <null>.");
+        assertThatThrownBy(() -> FirstLastComparator.compareLast(natural, (List<String>) null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("lastValues is <null>.");
     }
 
     static String sortString(Comparator<Character> comparator, String characters) {
