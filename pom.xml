@@ -67,11 +67,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- sonar -->
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.organization>talsma-ict</sonar.organization>
-        <sonar.projectKey>${sonar.organization}_${project.artifactId}</sonar.projectKey>
-
         <!-- test -->
         <junit.version>5.12.1</junit.version>
         <assertj.version>3.27.3</assertj.version>
@@ -83,40 +78,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <phase>compile</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <licenseSets>
-                        <licenseSet>
-                            <header>${project.basedir}/.mvn/license/header.txt</header>
-                            <includes>
-                                <include>pom.xml</include>
-                                <include>src/main/java/**</include>
-                                <include>src/test/java/**</include>
-                            </includes>
-                            <excludes>
-                                <exclude>**/*.md</exclude>
-                            </excludes>
-                        </licenseSet>
-                    </licenseSets>
-                    <mapping>
-                        <java>SLASHSTAR_STYLE</java>
-                    </mapping>
-                    <properties>
-                        <owner>${project.organization.name}</owner>
-                    </properties>
-                    <strictCheck>true</strictCheck>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -168,7 +129,7 @@
                     </execution>
                     <execution>
                         <id>report-aggregate</id>
-                        <phase>verify</phase>
+                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>report-aggregate</goal>
                         </goals>
@@ -203,16 +164,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>central</publishingServerId>
-                    <autoPublish>true</autoPublish>
-                    <waitUntil>published</waitUntil>
-                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -333,10 +284,10 @@
 
     <profiles>
         <profile>
-            <id>publish</id>
+            <id>maven-central</id>
             <activation>
                 <property>
-                    <name>publish</name>
+                    <name>env.MAVEN_CENTRAL_USERNAME</name>
                 </property>
             </activation>
             <build>
@@ -373,9 +324,51 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <property>
+                    <name>env.SONAR_TOKEN</name>
+                </property>
+            </activation>
+            <properties>
+                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+                <sonar.organization>talsma-ict</sonar.organization>
+                <sonar.projectKey>talsma-ict_misc-java-utils</sonar.projectKey>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sonar-check</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sonar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>coveralls</id>
             <activation>
@@ -400,13 +393,54 @@
                         <configuration>
                             <repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
                         </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>javax.xml.bind</groupId>
-                                <artifactId>jaxb-api</artifactId>
-                                <version>${coveralls.jaxb-api.version}</version>
-                            </dependency>
-                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>license-check</id>
+            <activation>
+                <property>
+                    <name>!skipLicenseCheck</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <phase>compile</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <header>${project.basedir}/.mvn/license/header.txt</header>
+                            <properties>
+                                <owner>${project.organization.name}</owner>
+                            </properties>
+                            <mapping>
+                                <java>SLASHSTAR_STYLE</java>
+                            </mapping>
+                            <excludes>
+                                <exclude>.gitignore</exclude>
+                                <exclude>.github/**</exclude>
+                                <exclude>.mvn/**</exclude>
+                                <exclude>mvnw*</exclude>
+                                <exclude>**/.idea/**</exclude>
+                                <exclude>LICENSE</exclude>
+                                <exclude>**/*.md</exclude>
+                                <exclude>**/*.puml</exclude>
+                                <exclude>**/*.svg</exclude>
+                                <exclude>src/main/resources/**</exclude>
+                                <exclude>src/test/resources/**</exclude>
+                            </excludes>
+                            <strictCheck>true</strictCheck>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
