@@ -3,7 +3,7 @@ name: Deploy artifacts
 on:
   workflow_run:
     workflows: [ 'Build and test' ]
-    branches: [ 'develop', 'master' ]
+    branches: [ 'develop', 'master', 'main' ]
 
 jobs:
   build:
@@ -13,17 +13,16 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Set up JDK 8 for compiling Java 8 compatible bytecode
-        id: setup-java-8
+      - name: Set up JDK and Maven Central deployment
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 8
-      - name: Set up Maven Central deployment
-        uses: actions/setup-java@v4
-        with: # update the settings.xml
-          distribution: temurin
-          java-version: 11
+          java-version: |
+            8
+            11
+          mvn-toolchain-id: |
+            jdk8
+            jdk11
           cache: maven
           server-id: central
           server-username: MAVEN_CENTRAL_USERNAME
