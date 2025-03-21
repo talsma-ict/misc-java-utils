@@ -72,7 +72,6 @@
         <assertj.version>3.27.3</assertj.version>
 
         <!-- build -->
-        <coveralls.jaxb-api.version>2.3.1</coveralls.jaxb-api.version>
         <umldoclet.version>2.2.1</umldoclet.version>
     </properties>
 
@@ -221,7 +220,7 @@
                         <dependency>
                             <groupId>javax.xml.bind</groupId>
                             <artifactId>jaxb-api</artifactId>
-                            <version>${coveralls.jaxb-api.version}</version>
+                            <version>2.3.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -277,8 +276,8 @@
 
     <repositories>
         <repository>
-            <id>sonatype-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>central-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
