@@ -23,8 +23,6 @@ jobs:
             echo "::error::Not a valid version: ${BRANCH##*/}"
             exit 1
           fi
-      - name: Print version
-        id: print_version
-        shell: bash
-        run: |
-          echo "version: ${{ steps.get_version.outputs.version }}"
+      - name: Set version
+        id: set_version
+        run: ./mvnw --batch-mode versions:set versions:commit -DnewVersion="${{ steps.get_version.outputs.version }}" -DprocessAllModules=true
