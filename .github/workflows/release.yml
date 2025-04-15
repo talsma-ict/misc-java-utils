@@ -1,0 +1,15 @@
+name: Release
+
+on:
+  push:
+    branches: [ 'release/*' ]
+
+jobs:
+  build:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine version
+        id: get_version
+        shell: bash
+        run: echo "branch=${{ github.head_ref || github.ref_name }}" >> $GITHUB_OUTPUT
