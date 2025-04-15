@@ -15,7 +15,7 @@ jobs:
           BRANCH: ${{ github.head_ref || github.ref_name }}
         shell: bash
         run: |
-          source .github/scripts/versioning.sh
+          source ../scripts/versioning.sh
           validate_version "${BRANCH##*/}"
           echo "version=${BRANCH##*/}" >> $GITHUB_OUTPUT
       - name: Print version
