@@ -13,12 +13,13 @@ jobs:
         id: get_version
         shell: bash
         run: |
-          echo "branch=${{ github.head_ref || github.ref_name }}" >> $GITHUB_OUTPUT
-          echo "version=$(echo \"${{ github.head_ref || github.ref_name }}\" | sed 's/^release[/-]//')" >> $GITHUB_OUTPUT
+          source .github/scripts/versioning.sh
+          local version="$(echo "${{ github.head_ref || github.ref_name }}" | sed 's/^release[/-]//')"
+          validate_version "${version}"
+          echo "version=${version}" >> $GITHUB_OUTPUT
       - name: Print version
         id: print_version
         shell: bash
         run: |
-          echo "branch: ${{ steps.get_version.outputs.branch }}"
           echo "version: ${{ steps.get_version.outputs.version }}"
 
