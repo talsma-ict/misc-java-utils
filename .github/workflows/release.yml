@@ -18,11 +18,41 @@ jobs:
         shell: bash
         run: |
           if [[ ${BRANCH##*/} =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9\.]+)*(\+[A-Za-z0-9\.\-]+)?$ ]]; then
+            echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
             echo "version=${BRANCH##*/}" >> $GITHUB_OUTPUT
           else
             echo "::error::Not a valid version: ${BRANCH##*/}"
             exit 1
           fi
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            11
+          mvn-toolchain-id: |
+            jdk8
+            jdk11
+          cache: maven
+#      - name: Fetch branch
+#        env:
+#          BRANCH: ${{ steps.get_version.outputs.branch }}
+#        run: |
+#          git fetch origin
+#          git checkout "${BRANCH}" || git checkout -B "${BRANCH}" "origin/${BRANCH}" && git pull --ff-only && git submodule update --init --recursive
       - name: Set version
         id: set_version
-        run: ./mvnw --batch-mode versions:set versions:commit -DnewVersion="${{ steps.get_version.outputs.version }}" -DprocessAllModules=true
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
+        run: ./mvnw --batch-mode versions:set versions:commit -DnewVersion="${VERSION}" -DprocessAllModules=true
+      - name: Commit and tag new version
+        env:
+#          BRANCH: ${{ steps.get_version.outputs.branch }}
+          VERSION: ${{ steps.get_version.outputs.version }}
+        run: |
+          git config user.name "Talsma CI"
+          git config user.email "ci-user@talsma-ict.nl"
+          git commit -sam "Release: Set project version to ${VERSION}"
+          git tag -m "Release version ${VERSION}" "${VERSION}"
+          git push --follow-tags
