@@ -9,18 +9,22 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code
+        uses: actions/checkout@v4
       - name: Determine version
         id: get_version
         env:
           BRANCH: ${{ github.head_ref || github.ref_name }}
         shell: bash
         run: |
-          source ../scripts/versioning.sh
-          validate_version "${BRANCH##*/}"
-          echo "version=${BRANCH##*/}" >> $GITHUB_OUTPUT
+          if [[ ${BRANCH##*/} =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9\.]+)*(\+[A-Za-z0-9\.\-]+)?$ ]]; then
+            echo "version=${BRANCH##*/}" >> $GITHUB_OUTPUT
+          else
+            echo "::error::Not a valid version: ${BRANCH##*/}"
+            exit 1
+          fi
       - name: Print version
         id: print_version
         shell: bash
         run: |
           echo "version: ${{ steps.get_version.outputs.version }}"
-

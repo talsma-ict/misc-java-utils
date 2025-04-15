@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 declare -f debug > /dev/null || source "$(dirname "$0")/logging.sh"
-declare -f is_maven_project > /dev/null || source "$(dirname "$0")/maven-functions.sh"
+#declare -f is_maven_project > /dev/null || source "$(dirname "$0")/maven-functions.sh"
 
 #----------------------
 # Script containing pre-defined functions regarding versioning.
