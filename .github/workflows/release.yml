@@ -11,12 +11,13 @@ jobs:
     steps:
       - name: Determine version
         id: get_version
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
         shell: bash
         run: |
           source .github/scripts/versioning.sh
-          local version="$(echo "${{ github.head_ref || github.ref_name }}" | sed 's/^release[/-]//')"
-          validate_version "${version}"
-          echo "version=${version}" >> $GITHUB_OUTPUT
+          validate_version "${BRANCH##*/}"
+          echo "version=${BRANCH##*/}" >> $GITHUB_OUTPUT
       - name: Print version
         id: print_version
         shell: bash
