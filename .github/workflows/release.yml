@@ -18,7 +18,7 @@ jobs:
         shell: bash
         run: |
           if [[ ${BRANCH##*/} =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9\.]+)*(\+[A-Za-z0-9\.\-]+)?$ ]]; then
-            echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
+            echo "BRANCH=${BRANCH}" >> $GITHUB_ENV
             echo "VERSION=${BRANCH##*/}" >> $GITHUB_ENV
           else
             echo "::error::Not a valid version: ${BRANCH##*/}"
@@ -35,9 +35,20 @@ jobs:
             jdk8
             jdk11
           cache: maven
+          server-id: central
+          server-username: MAVEN_CENTRAL_USERNAME
+          server-password: MAVEN_CENTRAL_TOKEN
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
       - name: Set version
-        id: set_version
         run: ./mvnw --batch-mode versions:set versions:commit -DnewVersion="${VERSION}" -DprocessAllModules=true
+      - name: Deploy release
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.SONATYPE_USER }}
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+#        run: ./mvnw --batch-mode clean license:format deploy
+        run: ./mvnw --batch-mode clean license:format install
       - name: Commit and tag new version
         run: |
           git config user.name "Talsma CI"
@@ -51,4 +62,8 @@ jobs:
           nextSnapshot="${base}$((minor+1))${suffix}-SNAPSHOT"
           ./mvnw --batch-mode versions:set versions:commit -DnewVersion="${nextSnapshot}" -DprocessAllModules=true
           git commit -sam "Release: Set next project version to ${nextSnapshot}"
-#          git push --follow-tags
+          git push --follow-tags
+      - name: Create post-release merge request
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: gh pr create -B main -H ${BRANCH} --title 'Merge release to main branch' --body 'Created by Github action'
