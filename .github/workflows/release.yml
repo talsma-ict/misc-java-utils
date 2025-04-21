@@ -55,4 +55,13 @@ jobs:
           git config user.email "ci-user@talsma-ict.nl"
           git commit -sam "Release: Set project version to ${VERSION}"
           git tag -m "Release version ${VERSION}" "${VERSION}"
-          git push --follow-tags
+#          git push --follow-tags
+      - name: Set next snapshot version
+        env:
+          VERSION: ${{ steps.get_version.outputs.version }}
+        run: |
+          read base minor suffix <<<$(echo "${VERSION}" | perl -pe 's/^(.*?)([0-9]+)([^0-9]*)$/\1 \2 \3/')
+          nextSnapshot="${base}$((minor+1))${suffix}-SNAPSHOT"
+          ./mvnw --batch-mode versions:set versions:commit -DnewVersion="${nextSnapshot}" -DprocessAllModules=true
+          git commit -sam "Release: Set next project version to ${nextSnapshot}"
+#          git push --follow-tags
