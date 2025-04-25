@@ -333,6 +333,20 @@
         </profile>
 
         <profile>
+            <id>github-packages</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/talsma-ict/misc-java-utils</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
             <id>sonar</id>
             <activation>
                 <property>
