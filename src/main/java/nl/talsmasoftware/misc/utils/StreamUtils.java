@@ -54,6 +54,10 @@ public final class StreamUtils {
      * Collector for the last <em>n</em> elements of a stream.
      *
      * <p>
+     * <b>Note:</b> Obvious caveat: the stream to be collected must be a limited stream,
+     * e.g. have an actual last element.
+     *
+     * <p>
      * The returned list is unmodifiable.
      *
      * @param maxSize The maximum size of the list to return.
