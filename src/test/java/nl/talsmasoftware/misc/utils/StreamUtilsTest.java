@@ -17,6 +17,8 @@ package nl.talsmasoftware.misc.utils;
 
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,6 +32,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class StreamUtilsTest {
+    @Test
+    void streamUtils_utility_class_has_unsupported_constructor() throws ReflectiveOperationException {
+        Constructor<StreamUtils> constructor = StreamUtils.class.getDeclaredConstructor();
+        assertThat(constructor.isAccessible()).isFalse();
+        constructor.setAccessible(true);
+        assertThatThrownBy(constructor::newInstance)
+                .isInstanceOf(InvocationTargetException.class)
+                .cause()
+                .isInstanceOf(UnsupportedOperationException.class)
+                .hasMessage("This is a utility class and cannot be instantiated.");
+    }
 
     @Test
     void streamNullable_null_returns_empty_stream() {
