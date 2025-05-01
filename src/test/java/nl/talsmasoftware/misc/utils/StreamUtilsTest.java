@@ -33,6 +33,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class StreamUtilsTest {
     @Test
+    @SuppressWarnings({
+            "java:S1874" // We use java8, where canAccess is not yet available to replace isAccessible.
+    })
     void streamUtils_utility_class_has_unsupported_constructor() throws ReflectiveOperationException {
         Constructor<StreamUtils> constructor = StreamUtils.class.getDeclaredConstructor();
         assertThat(constructor.isAccessible()).isFalse();
