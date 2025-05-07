@@ -191,7 +191,7 @@ public class RandomGenerator extends Random {
      * @param length     The length the resulting String must have.
      * @param characters The characters that may occur in the random String.
      * @return A random String of the specified {@code length},
-     * consisting of the specified uit de opgegeven {@code characters}.
+     * consisting of the specified {@code characters}.
      * @see #nextString(int, int, CharSequence)
      */
     public String nextString(int length, CharSequence characters) {
