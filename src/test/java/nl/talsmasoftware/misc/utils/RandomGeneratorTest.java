@@ -123,10 +123,10 @@ class RandomGeneratorTest {
     @Test
     @DisplayName("nextString: Fixed length matches with generated string")
     void nextString_fixedLengthMatchesWithGeneratedString() {
-        final int lengte = 5 + RND.nextInt(10);
+        final int length = 5 + RND.nextInt(10);
         for (int i = 0; i < 100; i++) {
-            String result = RND.nextString(lengte, RandomGenerator.CAPITAL_LETTERS);
-            assertThat(result).hasSize(lengte).matches("^[A-Z]+$");
+            String result = RND.nextString(length, RandomGenerator.CAPITAL_LETTERS);
+            assertThat(result).hasSize(length).matches("^[A-Z]+$");
         }
     }
 }
