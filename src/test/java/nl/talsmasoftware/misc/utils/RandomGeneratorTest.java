@@ -27,11 +27,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import static nl.talsmasoftware.misc.utils.RandomGenerator.RND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class RandomGeneratorTest {
+    /**
+     * Reusable random instance for tests.
+     */
+    static final RandomGenerator RND = new RandomGenerator();
+
     @Test
     @DisplayName("nextValueFrom: May not be called without values")
     void nextValueFrom_mayNotBeCalledWithoutValues() {

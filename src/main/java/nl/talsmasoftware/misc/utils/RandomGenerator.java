@@ -38,11 +38,6 @@ import static java.util.stream.Collectors.toCollection;
  */
 public class RandomGenerator extends Random {
     /**
-     * Reusable random instance for tests.
-     */
-    public static final RandomGenerator RND = new RandomGenerator();
-
-    /**
      * The lowercase letters {@code a..z}.
      *
      * <p>
