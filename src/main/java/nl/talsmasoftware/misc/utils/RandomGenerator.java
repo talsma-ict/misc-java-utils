@@ -166,7 +166,7 @@ public class RandomGenerator extends Random {
      * @param generator  Generator for the next random value (bijv. {@code RND::nextEnum}).
      * @param exceptions Values that must be excluded from the results.
      * @param <T>        The result type.
-     * @return Next random waarde that is not one of the given exceptions.
+     * @return Next random value that is not one of the given exceptions.
      * @see #nextValueExcept(Supplier, Collection)
      */
     @SafeVarargs
