@@ -76,12 +76,12 @@ class RandomGeneratorTest {
     @DisplayName("nextValueFromIterable: Chooses from all values")
     void nextValueFromIterable_choosesFromAllValues() {
         final List<String> list = Arrays.asList("a", "b", "c");
-        Iterable<String> alleWaarden = list::iterator;
+        Iterable<String> allValues = list::iterator;
         Set<String> remaining = new LinkedHashSet<>(list);
 
         long deadline = System.currentTimeMillis() + Duration.ofMinutes(1).toMillis();
         while (deadline > System.currentTimeMillis() && !remaining.isEmpty()) {
-            remaining.remove(RND.nextValueFrom(alleWaarden));
+            remaining.remove(RND.nextValueFrom(allValues));
         }
 
         assertThat(remaining).as("Remaining values").isEmpty();
