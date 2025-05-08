@@ -133,4 +133,19 @@ class RandomGeneratorTest {
             assertThat(result).hasSize(length).matches("^[A-Z]+$");
         }
     }
+
+    @Test
+    @DisplayName("shuffleCharacters: Shuffled string has the same length and the same characters")
+    void shuffleCharacters_shuffledStringHasTheSameLengthAndTheSameCharacters() {
+        String source = RND.nextString(255, RandomGenerator.NUMBERS_LETTERS_AND_SPACES);
+        for (int i = 0; i < 100; i++) {
+            String shuffled = RND.shuffleCharacters(source);
+            assertThat(shuffled).hasSameSizeAs(source);
+            source.chars().forEach(ch -> assertThat(count(shuffled, ch)).isSameAs(count(source, ch)));
+        }
+    }
+
+    private static long count(CharSequence cs, int codePoint) {
+        return cs.chars().filter(ch -> ch == codePoint).count();
+    }
 }
