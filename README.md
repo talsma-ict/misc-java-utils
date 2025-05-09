@@ -26,7 +26,7 @@ However:
 
 - [Apache 2.0 license](./LICENSE)
 
-  [maven-img]: <https://img.shields.io/maven-central/v/nl.talsmasoftware.misc/misc-java-utils>
-  [maven]: <http://mvnrepository.com/artifact/nl.talsmasoftware.misc/misc-java-utils>
+  [maven-img]: https://img.shields.io/maven-central/v/nl.talsmasoftware.misc/misc-java-utils
+  [maven]: https://central.sonatype.com/artifact/nl.talsmasoftware.misc/misc-java-utils
   [javadoc-img]: <https://www.javadoc.io/badge/nl.talsmasoftware.misc/misc-java-utils.svg>
   [javadoc]: <https://www.javadoc.io/doc/nl.talsmasoftware.misc/misc-java-utils>
