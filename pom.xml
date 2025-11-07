@@ -72,7 +72,7 @@
         <assertj.version>3.27.6</assertj.version>
 
         <!-- build -->
-        <umldoclet.version>2.2.3</umldoclet.version>
+        <umldoclet.version>2.2.4</umldoclet.version>
     </properties>
 
     <build>
