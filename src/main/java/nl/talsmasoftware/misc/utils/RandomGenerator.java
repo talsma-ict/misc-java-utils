@@ -15,16 +15,11 @@
  */
 package nl.talsmasoftware.misc.utils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.StreamSupport;
-
-import static java.util.stream.Collectors.toCollection;
 
 /**
  * Class extending the standard {@linkplain Random} with richer generators.
@@ -245,8 +240,14 @@ public class RandomGenerator extends Random {
      * @return The specified characters in random order as a new String.
      */
     public String shuffleCharacters(CharSequence characters) {
-        List<Character> chars = characters.chars().mapToObj(ch -> (char) ch).collect(toCollection(ArrayList::new));
-        Collections.shuffle(chars, this);
-        return chars.stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
+        int otheridx, buf;
+        final int[] chars = characters.codePoints().toArray();
+        for (int i = chars.length; i > 1; i--) {
+            otheridx = this.nextInt(i);
+            buf = chars[otheridx];
+            chars[otheridx] = chars[i - 1];
+            chars[i - 1] = buf;
+        }
+        return new String(chars, 0, chars.length);
     }
 }
