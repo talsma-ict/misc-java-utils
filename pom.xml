@@ -25,7 +25,7 @@
     <!-- Artifact identification -->
     <groupId>nl.talsmasoftware.misc</groupId>
     <artifactId>misc-java-utils</artifactId>
-    <version>0.0.6-SNAPSHOT</version>
+    <version>0.0.7-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <!-- Project information -->
