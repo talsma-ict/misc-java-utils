@@ -71,7 +71,7 @@
         <project.jdk.legacy>8</project.jdk.legacy>
 
         <!-- test -->
-        <junit.version>6.0.1</junit.version>
+        <junit.version>6.0.2</junit.version>
         <assertj.version>3.27.6</assertj.version>
 
         <!-- build -->
