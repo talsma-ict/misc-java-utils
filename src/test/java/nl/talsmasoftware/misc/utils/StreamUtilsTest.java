@@ -15,6 +15,8 @@
  */
 package nl.talsmasoftware.misc.utils;
 
+import org.assertj.core.data.MapEntry;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
@@ -22,7 +24,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -48,15 +52,27 @@ class StreamUtilsTest {
     }
 
     @Test
-    void streamNullable_null_returns_empty_stream() {
+    @DisplayName("streamNullable: null iterable returns empty stream.")
+    void streamNullable_null_iterable_returns_empty_stream() {
         // when
-        Stream<?> result = StreamUtils.streamNullable(null);
+        Stream<?> result = StreamUtils.streamNullable((Iterable<?>) null);
 
         // then
         assertThat(result).isNotNull().isEmpty();
     }
 
     @Test
+    @DisplayName("streamNullable: null map returns empty stream.")
+    void streamNullable_null_map_returns_empty_stream() {
+        // when
+        var result = StreamUtils.streamNullable((Map<?, ?>) null);
+
+        // then
+        assertThat(result).isNotNull().isEmpty();
+    }
+
+    @Test
+    @DisplayName("streamNullable: empty collection returns empty stream.")
     void streamNullable_empty_returns_empty_stream() {
         // when
         Stream<?> result = StreamUtils.streamNullable(Collections.emptyList());
@@ -66,6 +82,7 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("streamNullable: empty iterable returns empty stream.")
     void streamNullable_empty_Iterable_returns_empty_stream() {
         // given
         Iterable<?> emptyIterable = Collections::emptyIterator;
@@ -78,6 +95,16 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("streamNullable: empty map returns empty stream.")
+    void streamNullable_empty_map_returns_empty_stream() {
+        var result = StreamUtils.streamNullable(Collections.emptyMap());
+        assertThat(result).as("Stream from empty map")
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test
+    @DisplayName("streamNullable: collection is streamed with filtered null values.")
     void streamNullable_returns_stream_from_collection() {
         // when
         Stream<Integer> result = StreamUtils.streamNullable(Arrays.asList(1, null, 2, null, 3));
@@ -87,6 +114,7 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("streamNullable: iterable is streamed with filtered null values.")
     void streamNullable_returns_stream_from_iterable() {
         // given
         Iterable<Integer> iterable = Arrays.asList(1, null, 2, null, 3)::iterator;
@@ -99,6 +127,23 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("streamNullable: map is streamed with filtered null values.")
+    void streamNullable_returns_stream_from_map() {
+        Map<String, String> map = new HashMap<>() {{
+            put("key1", null);
+            put("key2", "value2");
+        }};
+
+        var result = StreamUtils.streamNullable(map);
+
+        assertThat(result).as("Stream from map")
+                .isNotNull()
+                .hasSize(1)
+                .containsExactly(MapEntry.entry("key2", "value2"));
+    }
+
+    @Test
+    @DisplayName("last: Count must be a positive number.")
     void last_count_must_be_positive() {
         assertThatThrownBy(() -> StreamUtils.last(0))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -106,6 +151,7 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("last: Test last 2 of 10 items.")
     void last_2_of_10() {
         // given
         Stream<String> stream = IntStream.range(1, 11).mapToObj(Integer::toString);
@@ -118,6 +164,7 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("last: Test last 10 of 2 items.")
     void last_10_of_2() {
         // given
         Stream<String> stream = Stream.of("1", "2");
@@ -130,6 +177,7 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("last: Test last 10 of 10 items.")
     void last_10_of_10() {
         // given
         Stream<String> stream = IntStream.range(1, 11).mapToObj(Integer::toString);
@@ -142,6 +190,7 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("last: Test combiner when acc2 is full.")
     void last_combiner_acc2_is_full() {
         // given
         Collector<String, ArrayList<String>, List<String>> collector = StreamUtils.last(10);
@@ -159,6 +208,7 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("last: Test combiner when acc2 still has some space available.")
     void last_combiner_acc2_has_some_space() {
         // given
         Collector<String, ArrayList<String>, List<String>> collector = StreamUtils.last(10);
@@ -176,6 +226,7 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("last: Test combiner when acc1 and acc2 both fit.")
     void last_combiner_acc1_and_acc2_both_fit() {
         // given
         Collector<String, ArrayList<String>, List<String>> collector = StreamUtils.last(10);

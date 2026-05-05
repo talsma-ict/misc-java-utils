@@ -19,28 +19,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/// Class for [Stream] utility methods.
 public final class StreamUtils {
-
+    /// Private constructor to avoid utility class instantiation.
     private StreamUtils() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated.");
     }
 
-    /**
-     * Stream the elements of a (nullable) {@linkplain Iterable} object.
-     *
-     * <p>
-     * The resulting stream also filters any {@code null} elements from the result.
-     *
-     * @param iterable The iterable object (optional, may be {@code null}).
-     * @param <T>      The type of the iterable elements.
-     * @return Non-{@code null} Stream with the elements from the given iterable.
-     * Null-values will be filtered out.
-     */
+    /// Stream the elements of a (nullable) [Iterable] object.
+    ///
+    /// The resulting [Stream] also filters any `null` elements from the result.
+    ///
+    /// @param iterable The iterable object (optional, may be `null`).
+    /// @param <T>      The type of the iterable elements.
+    /// @return Non-`null` [Stream] with the elements from the given [Iterable]. All iterated `null` values will be filtered out.
     public static <T> Stream<T> streamNullable(Iterable<T> iterable) {
         if (iterable == null) {
             return Stream.empty();
@@ -50,21 +48,33 @@ public final class StreamUtils {
         return StreamSupport.stream(iterable.spliterator(), false).filter(Objects::nonNull);
     }
 
-    /**
-     * Collector for the last <em>n</em> elements of a stream.
-     *
-     * <p>
-     * <b>Note:</b> Obvious caveat: the stream to be collected must be a limited stream,
-     * e.g. have an actual last element.
-     *
-     * <p>
-     * The returned list is unmodifiable.
-     *
-     * @param maxSize The maximum size of the list to return.
-     * @param <T>     The type of elements to be collected.
-     * @return Collector returning the last <em>n</em> elements as a list,
-     * or the full stream content if there were at most {@code maxSize} elements.
-     */
+    /// Stream the elements of a (nullable) [Map] object.
+    ///
+    /// The resulting [Stream] also filters any [entries][Map.Entry] with `null` values.
+    ///
+    /// @param map The map object (optional, may be `null`).
+    /// @param <K> The 'key' type of the map.
+    /// @param <V> The 'value' type of the map.
+    /// @return Non-`null` [Stream] of [map entries][Map.Entry] from the given [Map]. All iterated entries with `null` values will be filtered out.
+    /// @see #streamNullable(Iterable)
+    public static <K, V> Stream<Map.Entry<K, V>> streamNullable(Map<K, V> map) {
+        if (map == null) {
+            return Stream.empty();
+        }
+        return map.entrySet().stream().filter(entry -> entry.getValue() != null);
+    }
+
+    /// Collector for the last _n_ elements of a [Stream].
+    ///
+    /// **Note:** Obvious caveat: The stream to be collected **must** be a limited stream,
+    /// in other words, actually _have_ a last element.
+    ///
+    /// The returned list is unmodifiable.
+    ///
+    /// @param maxSize The maximum size of the [List] to return.
+    /// @param <T>     The type of elements to be collected.
+    /// @return Collector returning the last _n_ elements as a [List],
+    /// or the entire stream content if there were at most `maxSize` elements.
     public static <T> Collector<T, ArrayList<T>, List<T>> last(final int maxSize) {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("Maximum size must be a positive number.");
