@@ -33,4 +33,4 @@ jobs:
           MAVEN_CENTRAL_USERNAME: ${{ secrets.SONATYPE_USER }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: ./mvnw --batch-mode --no-snapshot-updates deploy -DskipTests -DskipLicenseCheck -Dmaven.repository.credentialScope=central
+        run: ./mvnw --batch-mode --no-snapshot-updates deploy -DskipTests -DskipLicenseCheck -Dmaven.repository.credentialScope=id
